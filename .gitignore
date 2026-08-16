@@ -42,7 +42,8 @@ Output/
 logs/
 results/
 checkpoints/
-Models/
+**/Models/
+**/checkpoints/
 
 # Generated plots and images
 *.png
