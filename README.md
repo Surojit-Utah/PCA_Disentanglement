@@ -33,7 +33,7 @@ by Surojit Saha, Sarang Joshi, and Ross Whitaker (ICASSP 2024)
 
 ### The Rotation Invariance Problem
 
-Standard disentanglement metrics (FactorVAE, MIG, DCI) assume that **latent axes (cardinal directions) align with ground truth factors**. This assumption holds for VAEs because they use a **factorized Gaussian posterior** $q_\phi(\mathbf{z}|\mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}_\mathbf{x}, \boldsymbol{\sigma}_\mathbf{x}^2\mathbf{I})$ that encourages axis-aligned representations.
+Standard disentanglement metrics (FactorVAE, MIG, DCI) assume that **latent axes (cardinal directions) align with ground truth factors**. This assumption holds for VAEs because they use a **factorized Gaussian posterior** $q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}_{\mathbf{x}}, \boldsymbol{\sigma}_{\mathbf{x}}^2\mathbf{I})$ that encourages axis-aligned representations.
 
 However, several DLVMs match the **aggregate posterior** $q_\phi(\mathbf{z})$ to an **isotropic Gaussian prior** $\mathcal{N}(\mathbf{0}, \mathbf{I})$:
 - **AVAE** (Aggregate Variational Autoencoder)
@@ -49,9 +49,9 @@ $$\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}) \quad \Rightarrow \quad \t
 
 ### Our Solution: PCA-Based Latent Directions
 
-Instead of evaluating disentanglement along cardinal axes $[\mathbf{e}_1, \mathbf{e}_2, \ldots, \mathbf{e}_l]$, we:
+Instead of evaluating disentanglement along cardinal axes $[\mathbf{e}_1, \mathbf{e}_2, \dots, \mathbf{e}_l]$, we:
 
-1. **Discover latent directions** $\mathcal{D} = [\mathbf{u}_1^*, \mathbf{u}_2^*, \ldots, \mathbf{u}_k^*]$ using PCA on encoded representations
+1. **Discover latent directions** $\mathcal{D} = [\mathbf{u}_1^\*, \mathbf{u}_2^\*, \dots, \mathbf{u}_k^\*]$ using PCA on encoded representations
 2. Fix one ground truth factor at a time and vary others
 3. Apply PCA to find the direction of minimal variance (the fixed factor)
 4. Aggregate multiple PCA estimates via eigendecomposition of mean outer products
@@ -414,22 +414,22 @@ Output/DSprites/mse_error.txt
    - Encode $L$ samples → latent representations $\mathcal{Z}^i$
    - Apply PCA → eigenvector with **minimum variance** = direction for factor $k$
 2. Repeat $N$ times with different fixed values
-3. Aggregate via eigendecomposition of mean outer product → $\mathbf{u}_k^*$ (final direction)
-4. Use **cosine similarity** between test samples and $\{\mathbf{u}_k^*\}$ to classify factors
+3. Aggregate via eigendecomposition of mean outer product → $\mathbf{u}_k^\*$ (final direction)
+4. Use **cosine similarity** between test samples and $\{\mathbf{u}_k^\*\}$ to classify factors
 5. Report classification accuracy
 
 **Why it works:** Fixing one factor while varying others isolates variance orthogonal to that factor. The minimum-variance PCA direction captures the fixed factor.
 
 **Standard FactorVAE vs. PCA FactorVAE:**
-- **Standard:** Uses cardinal axes $[\mathbf{e}_1, \ldots, \mathbf{e}_l]$
-- **PCA-based:** Uses discovered directions $[\mathbf{u}_1^*, \ldots, \mathbf{u}_k^*]$
+- **Standard:** Uses cardinal axes $[\mathbf{e}_1, \dots, \mathbf{e}_l]$
+- **PCA-based:** Uses discovered directions $[\mathbf{u}_1^\*, \dots, \mathbf{u}_k^\*]$
 
 ### 2. PCA MIG (Mutual Information Gap) (Higher is Better)
 
 **What it measures:** How much information latent variables carry about ground truth factors.
 
 **Algorithm:**
-1. Discover latent directions $\mathcal{D} = [\mathbf{u}_1^*, \ldots, \mathbf{u}_k^*]$ using PCA
+1. Discover latent directions $\mathcal{D} = [\mathbf{u}_1^\*, \dots, \mathbf{u}_k^\*]$ using PCA
 2. Encode dataset → latent representations $\mathcal{Z}$
 3. **Project** representations onto discovered directions: $\mathcal{Z}' = \mathcal{Z} \mathcal{D}^T$
 4. Discretize projected latents and ground truth factors
@@ -439,7 +439,7 @@ Output/DSprites/mse_error.txt
 
 **Standard MIG vs. PCA MIG:**
 - **Standard:** Uses cardinal axes $\mathbf{z}_j$ directly
-- **PCA-based:** Uses projected coordinates $\mathbf{z}'_j = \mathbf{z} \cdot \mathbf{u}_j^*$
+- **PCA-based:** Uses projected coordinates $\mathbf{z}'_j = \mathbf{z} \cdot \mathbf{u}_j^\*$
 
 ### 3. MSE (Mean Squared Error) (Lower is Better)
 
