@@ -1,10 +1,10 @@
 # PCA-Based Disentanglement Evaluation for Rotation-Invariant DLVMs
 
-[![ICASSP 2024](https://img.shields.io/badge/ICASSP%202024-Published-4B0082?style=for-the-badge)](https://ieeexplore.ieee.org/)
+[![ICASSP 2025](https://img.shields.io/badge/ICASSP%202025-Published-4B0082?style=for-the-badge)](https://ieeexplore.ieee.org/)
 [![arXiv](https://img.shields.io/badge/arXiv-2501.15705-b31b1b?style=for-the-badge)](https://arxiv.org/abs/2501.15705)
 
 **Evaluation library for "Disentanglement Analysis in Deep Latent Variable Models Matching Aggregate Posterior Distributions"**  
-by Surojit Saha, Sarang Joshi, and Ross Whitaker (ICASSP 2024)
+by Surojit Saha, Sarang Joshi, and Ross Whitaker (ICASSP 2025)
 
 > **⚠️ Important:** This is an **evaluation-only library**. It requires **pre-trained model checkpoints** to compute disentanglement metrics. This repository does not include training code.
 
@@ -33,7 +33,7 @@ by Surojit Saha, Sarang Joshi, and Ross Whitaker (ICASSP 2024)
 
 ### The Rotation Invariance Problem
 
-Standard disentanglement metrics (FactorVAE, MIG, DCI) assume that **latent axes (cardinal directions) align with ground truth factors**. This assumption holds for VAEs because they use a **factorized Gaussian posterior** $q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}_{\mathbf{x}}, \boldsymbol{\sigma}_{\mathbf{x}}^2\mathbf{I})$ that encourages axis-aligned representations.
+Standard disentanglement metrics (FactorVAE, MIG, DCI) assume that **latent axes (cardinal directions) align with ground truth factors**. This assumption holds for VAEs because they use a **factorized Gaussian posterior** $q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}_\mathbf{x}, \boldsymbol{\sigma}_\mathbf{x}^2\mathbf{I})$ that encourages axis-aligned representations.
 
 However, several DLVMs match the **aggregate posterior** $q_\phi(\mathbf{z})$ to an **isotropic Gaussian prior** $\mathcal{N}(\mathbf{0}, \mathbf{I})$:
 - **AVAE** (Aggregate Variational Autoencoder)
