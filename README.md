@@ -33,7 +33,7 @@ by Surojit Saha, Sarang Joshi, and Ross Whitaker (ICASSP 2025)
 
 ### The Rotation Invariance Problem
 
-Standard disentanglement metrics (FactorVAE, MIG, DCI) assume that **latent axes (cardinal directions) align with ground truth factors**. This assumption holds for VAEs because they use a **factorized Gaussian posterior** $q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}_\mathbf{x}, \boldsymbol{\sigma}_\mathbf{x}^2\mathbf{I})$ that encourages axis-aligned representations.
+Standard disentanglement metrics (FactorVAE, MIG, DCI) assume that **latent axes (cardinal directions) align with ground truth factors**. This assumption holds for VAEs because they use a **factorized Gaussian posterior** $q_\phi(\mathbf{z} \mid \mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}_x, \boldsymbol{\sigma}_x^2\mathbf{I})$ that encourages axis-aligned representations.
 
 However, several DLVMs match the **aggregate posterior** $q_\phi(\mathbf{z})$ to an **isotropic Gaussian prior** $\mathcal{N}(\mathbf{0}, \mathbf{I})$:
 - **AVAE** (Aggregate Variational Autoencoder)
