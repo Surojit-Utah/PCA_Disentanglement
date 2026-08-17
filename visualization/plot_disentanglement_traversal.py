@@ -52,8 +52,9 @@ if __name__=="__main__":
 
     parser = argparse.ArgumentParser(description="Experiment runfile, you run experiments from this file")
     parser.add_argument("--config_id", type=int, required=True)
+    parser.add_argument("--seed", type=int, default=1, help="Random seed / Run ID")
     args = parser.parse_args()
-    config = configurations[0][args.config_id]
+    config = configurations[args.config_id]
 
     # model configurations
     model_name                  = config['model_name']
@@ -72,9 +73,8 @@ if __name__=="__main__":
     alpha                       = np.sqrt(1/(1+ori_bandwidth**2)).astype(np.float32)
     bandwidth                   = ori_bandwidth*alpha
     Guassian_Prior_Std_Dev      = np.sqrt(1 - bandwidth**2).astype(np.float32)
-    basedir                     = os.path.join('..', '..', 'logs', dataset_name)
     savedir                     = os.path.join('logs', dataset_name)
-    eval_ids                    = np.arange(6, 7, 1).tolist()
+    eval_ids                    = [args.seed]
     enable_debug_mode           = False
 
 
@@ -90,7 +90,7 @@ if __name__=="__main__":
             decoder = Shapes3DDecoder(latent_dim=latent_dim, num_filter=num_filter)
         learning_rate = 5e-4
         optimizer = Adam(learning_rate)
-        checkpoint_dir = os.path.join(basedir, 'Run_' + str(run_id), 'Models')
+        checkpoint_dir = config['model_checkpoint_dir'].format(run_id=run_id)
         model_checkpoint = tf.train.Checkpoint(optimizer=optimizer, encoder=encoder, decoder=decoder)
         status = model_checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
         status.assert_existing_objects_matched()
@@ -124,7 +124,7 @@ if __name__=="__main__":
 
         # Get the PCA axis onto which the sampled data will be projected
         print("Using the Eigen decomposition of the outer product of PCA vectors for a latent GT factor")
-        mig_pca_axis_obj = mig_pca_axis.mig_pca_axis(dataset_name, use_whiten_data, run_id, encoder)
+        mig_pca_axis_obj = mig_pca_axis(dataset_name, use_whiten_data, run_id, encoder)
         op_pca_vectors = mig_pca_axis_obj.get_pca_axis_using_outer_prod((pca_gt_factor, pca_latent_representation))
 
         # save images
@@ -173,12 +173,6 @@ if __name__=="__main__":
                 # When using the mean vector in the transformed space, add the mean vector to the inverse transformation
                 # data_space_proj = np.dot(pca_space_samples, op_pca_vectors) + mean_latent_vector
                 data_space_proj = np.dot(pca_space_samples, op_pca_vectors)
-                # steps to debug the error in projection to PCA axes and inverse transformation
-                data_space_proj[0] = latent_representation[repeat_index]
-                data_space_proj[1] = np.dot(pca_sample_array, op_pca_vectors)
-                print(data_space_proj[0])
-                print(data_space_proj[1])
-                input()
                 if enable_debug_mode:
                     mean_data_space_proj = np.mean(data_space_proj, axis=0)
                     std_data_space_proj = np.std(data_space_proj, axis=0)

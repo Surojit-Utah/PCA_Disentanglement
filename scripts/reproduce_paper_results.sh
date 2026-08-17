@@ -110,7 +110,13 @@ run_evaluation() {
     echo "$dataset_name evaluation complete!"
     echo "=========================================="
     echo ""
-    
+
+    # Aggregate per-run results into mean +/- std summary files -- required
+    # before the summary section below can find anything to display.
+    echo "Aggregating results across $NUM_SEEDS runs..."
+    python aggregate_results.py --config_id $config_id
+    echo ""
+
     # Print summary statistics
     echo "Results Summary for $dataset_name:"
     echo "-------------------------------------------"
@@ -156,14 +162,15 @@ generate_visualizations() {
     echo "=========================================="
     echo ""
     
-    # Angle plots (Figure 2)
-    echo "Generating angle distribution plots (Figure 2)..."
-    python plot_angles.py --config_id $config_id --seed 1
-    echo "✓ Angle plots saved"
-    
+    # Angle plots (Figure 2) -- already generated as a side effect of
+    # eval/compute_metrics.py (metrics/factor_pca.py and mig_pca.py both call
+    # plot_angle_between_pca_axis/plot_histogram_features during the run above),
+    # saved per-run under Output/.../Run_N/. No separate script needed.
+    echo "Angle distribution plots (Figure 2) already saved per-run during evaluation above."
+
     # Latent traversals (Figure 1)
     echo "Generating latent traversal visualizations (Figure 1)..."
-    python plot_traversals.py --config_id $config_id --seed 1
+    python visualization/plot_disentanglement_traversal.py --config_id $config_id --seed 1
     echo "✓ Traversal plots saved"
     
     echo ""

@@ -89,7 +89,13 @@ function Run-Evaluation {
     Write-Host "$DatasetName evaluation complete!" -ForegroundColor Cyan
     Write-Host "==========================================" -ForegroundColor Cyan
     Write-Host ""
-    
+
+    # Aggregate per-run results into mean +/- std summary files -- required
+    # before the summary section below can find anything to display.
+    Write-Host "Aggregating results across $NumSeeds runs..."
+    python aggregate_results.py --config_id $ConfigId
+    Write-Host ""
+
     # Print summary statistics
     Write-Host "Results Summary for $DatasetName:" -ForegroundColor Cyan
     Write-Host "-------------------------------------------"
@@ -145,16 +151,15 @@ function Generate-Visualizations {
     Write-Host "==========================================" -ForegroundColor Cyan
     Write-Host ""
     
-    # Angle plots (Figure 2)
-    Write-Host "Generating angle distribution plots (Figure 2)..."
-    python plot_angles.py --config_id $ConfigId --seed 1
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ Angle plots saved" -ForegroundColor Green
-    }
-    
+    # Angle plots (Figure 2) -- already generated as a side effect of
+    # eval\compute_metrics.py (metrics/factor_pca.py and mig_pca.py both call
+    # plot_angle_between_pca_axis/plot_histogram_features during the run above),
+    # saved per-run under Output\...\Run_N\. No separate script needed.
+    Write-Host "Angle distribution plots (Figure 2) already saved per-run during evaluation above."
+
     # Latent traversals (Figure 1)
     Write-Host "Generating latent traversal visualizations (Figure 1)..."
-    python plot_traversals.py --config_id $ConfigId --seed 1
+    python visualization\plot_disentanglement_traversal.py --config_id $ConfigId --seed 1
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✓ Traversal plots saved" -ForegroundColor Green
     }

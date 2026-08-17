@@ -106,7 +106,7 @@ if __name__=="__main__":
         
         # Get the mean PCA vectors using the train data
         print("Computing PCA-based factor directions...")
-        factor_pca_axis_obj = factor_pca_axis.factor_pca_axis(
+        factor_pca_axis_obj = factor_pca_axis(
             dataset_name, use_whiten_data, run_id, encoder)
         avg_pca_vectors_using_outer_prod = factor_pca_axis_obj.get_pca_axis_using_outer_prod(
             sampled_data=(gt_factor, gt_factor_pca_axis))
@@ -162,7 +162,7 @@ if __name__=="__main__":
         
         # Get the PCA axis onto which the sampled data will be projected
         print("Computing PCA-based MIG directions...")
-        mig_pca_axis_obj = mig_pca_axis.mig_pca_axis(
+        mig_pca_axis_obj = mig_pca_axis(
             dataset_name, use_whiten_data, run_id, encoder)
         
         print("\n" + "="*50)

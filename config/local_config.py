@@ -25,7 +25,12 @@ configurations = {
         
         # Evaluation parameters
         'use_whiten_data': False,     # Whether to whiten latent representations
-        'encoder_use_batch_norm': True,
+        # Verified against Code/disentanglement_pca/config/local_config.py (config_id 3)
+        # and against real logged results (Output/DSprites_TNNLS/*/No_Whiten/Run_1-10):
+        # both False reproduces the paper's exact 79.17+/-1.64 (FactorVAE) and
+        # 0.20+/-0.02 (MIG) -- do not change without re-verifying against those logs.
+        'encoder_use_batch_norm': False,
+        'decoder_use_batch_norm': False,
         'num_bins': 10,               # Number of bins for discretization
         
         # Model checkpoint path
@@ -57,7 +62,12 @@ configurations = {
         
         # Evaluation parameters
         'use_whiten_data': False,
-        'encoder_use_batch_norm': True,
+        # Verified against Code/disentanglement_pca/config/local_config.py (config_id 4)
+        # and against real logged results (Output/Shapes3D/*/No_Whiten/Run_1-10):
+        # both False reproduces the paper's exact 91.93+/-3.27 (FactorVAE) and
+        # 0.67+/-0.04 (MIG) -- do not change without re-verifying against those logs.
+        'encoder_use_batch_norm': False,
+        'decoder_use_batch_norm': False,
         'num_bins': 10,
         
         # Model checkpoint path
